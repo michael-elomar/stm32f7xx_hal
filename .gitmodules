@@ -1,0 +1,3 @@
+[submodule "CMSIS"]
+	path = CMSIS
+	url = git@github.com:michael-elomar/CMSIS-F7.git
