@@ -1,3 +1,6 @@
 [submodule "CMSIS"]
 	path = CMSIS
 	url = git@github.com:michael-elomar/CMSIS-F7.git
+[submodule "stm32f7xx-hal-driver"]
+	path = stm32f7xx-hal-driver
+	url = https://github.com/STMicroelectronics/stm32f7xx-hal-driver.git
