@@ -38,7 +38,7 @@ OUT_DIR = out
 # source
 ######################################
 # C sources
-C_SOURCES = $(wildcard stm32f7xx-hal-driver/Src/*.c)
+C_SOURCES = $(shell find stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
 
 
 #######################################
