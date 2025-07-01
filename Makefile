@@ -34,6 +34,9 @@ BUILD_DIR = build
 # Out path
 OUT_DIR = out
 
+OUT_DIR_LIB = $(OUT_DIR)/lib
+OUT_DIR_INCLUDE = $(OUT_DIR)/include
+
 ######################################
 # source
 ######################################
@@ -47,8 +50,6 @@ C_SOURCES = $(shell find stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "
 PREFIX = arm-none-eabi-
 # The gcc compiler bin path can be either defined in make command via GCC_PATH variable (> make GCC_PATH=xxx)
 # either it can be added to the PATH environment variable.
-
-GCC_PATH = /home/finrod/Apps/gcc-arm-none-eabi/bin
 
 ifdef GCC_PATH
 CC = $(GCC_PATH)/$(PREFIX)gcc
@@ -125,7 +126,7 @@ LIBS = -lc -lm -lnosys
 LDFLAGS = $(MCU) -specs=nano.specs $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 
 # default action: build all
-all: $(OUT_DIR)/$(TARGET).a
+all: $(TARGET).a headers
 
 #######################################
 # build the application
@@ -138,13 +139,26 @@ vpath %.c $(sort $(dir $(C_SOURCES)))
 $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 	$(CC) -c $(CFLAGS) -Wa,-a,-ad,-alms=$(BUILD_DIR)/$(notdir $(<:.c=.lst)) $< -o $@
 
-$(OUT_DIR)/$(TARGET).a: $(OBJECTS) Makefile | $(OUT_DIR)
-	$(AR) rcs $(OUT_DIR)/$(TARGET).a $(OBJECTS)
+$(TARGET).a: $(OBJECTS) Makefile | $(OUT_DIR) $(OUT_DIR_INCLUDE) $(OUT_DIR_LIB)
+	$(AR) rcs $(OUT_DIR_LIB)/$(TARGET).a $(OBJECTS)
+
+headers:
+	cp -r --parents stm32f7xx-hal-driver/Inc/ $(OUT_DIR_INCLUDE)
+	cp -r --parents stm32f7xx-hal-driver/Inc/Legacy/ $(OUT_DIR_INCLUDE)
+	cp -r --parents CMSIS/Device/Include/* $(OUT_DIR_INCLUDE)
+	cp -r --parents CMSIS/Include/* $(OUT_DIR_INCLUDE)
+	cp -r --parents Include/ $(OUT_DIR_INCLUDE)
 
 $(BUILD_DIR):
 	mkdir $@
 
 $(OUT_DIR):
+	mkdir $@
+
+$(OUT_DIR_LIB):
+	mkdir $@
+
+$(OUT_DIR_INCLUDE):
 	mkdir $@
 
 #######################################
