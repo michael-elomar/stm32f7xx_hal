@@ -41,8 +41,11 @@ OUT_DIR_INCLUDE = $(OUT_DIR)/include
 # source
 ######################################
 # C sources
+ifdef PARENT
+C_SOURCES = $(shell find $(PARENT)/stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
+else
 C_SOURCES = $(shell find stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
-
+endif
 
 #######################################
 # binaries
@@ -92,18 +95,22 @@ C_DEFS =  \
 -DUSE_HAL_DRIVER \
 -DSTM32F767xx
 
-
-# AS includes
-AS_INCLUDES =
-
 # C includes
+ifdef PARENT
+C_INCLUDES =  \
+-I$(PARENT)/stm32f7xx-hal-driver/Inc \
+-I$(PARENT)/stm32f7xx-hal-driver/Inc/Legacy \
+-I$(PARENT)/CMSIS/Device/Include \
+-I$(PARENT)/CMSIS/Include \
+-I$(PARENT)/Include
+else
 C_INCLUDES =  \
 -Istm32f7xx-hal-driver/Inc \
 -Istm32f7xx-hal-driver/Inc/Legacy \
 -ICMSIS/Device/Include \
 -ICMSIS/Include \
 -IInclude
-
+endif
 
 CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
