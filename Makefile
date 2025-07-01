@@ -149,13 +149,22 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(TARGET).a: $(OBJECTS) Makefile | $(OUT_DIR) $(OUT_DIR_INCLUDE) $(OUT_DIR_LIB)
 	$(AR) rcs $(OUT_DIR_LIB)/$(TARGET).a $(OBJECTS)
 
+
+ifdef PARENT
+headers:
+	cp -r --parents $(PARENT)/stm32f7xx-hal-driver/Inc/ $(OUT_DIR_INCLUDE)
+	cp -r --parents $(PARENT)/stm32f7xx-hal-driver/Inc/Legacy/ $(OUT_DIR_INCLUDE)
+	cp -r --parents $(PARENT)/CMSIS/Device/Include/* $(OUT_DIR_INCLUDE)
+	cp -r --parents $(PARENT)/CMSIS/Include/* $(OUT_DIR_INCLUDE)
+	cp -r --parents $(PARENT)/Include/ $(OUT_DIR_INCLUDE)
+else
 headers:
 	cp -r --parents stm32f7xx-hal-driver/Inc/ $(OUT_DIR_INCLUDE)
 	cp -r --parents stm32f7xx-hal-driver/Inc/Legacy/ $(OUT_DIR_INCLUDE)
 	cp -r --parents CMSIS/Device/Include/* $(OUT_DIR_INCLUDE)
 	cp -r --parents CMSIS/Include/* $(OUT_DIR_INCLUDE)
 	cp -r --parents Include/ $(OUT_DIR_INCLUDE)
-
+endif
 $(BUILD_DIR):
 	mkdir $@
 
