@@ -28,15 +28,21 @@ OPT = -Og
 #######################################
 # paths
 #######################################
+ifdef PARENT
 # Build path
-BUILD_DIR = build
+BUILD_DIR = $(PARENT)/build
 
 # Out path
+OUT_DIR = $(PARENT)/out
+else
+# Build path
+BUILD_DIR = build
+# Out path
 OUT_DIR = out
+endif
 
 OUT_DIR_LIB = $(OUT_DIR)/lib
 OUT_DIR_INCLUDE = $(OUT_DIR)/include
-
 ######################################
 # source
 ######################################
