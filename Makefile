@@ -31,7 +31,11 @@ OPT = -Og
 # Build path
 BUILD_DIR = build
 # Out path
+ifdef PREFIX
+OUT_DIR = $(PREFIX)
+else
 OUT_DIR = out
+endif
 
 
 OUT_DIR_LIB = $(OUT_DIR)/lib
