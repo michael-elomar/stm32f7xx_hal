@@ -10,6 +10,10 @@
 #   2015-07-22 - first version
 # ------------------------------------------------
 
+# CURRENT DIR
+LOCAL_PATH := ${CURDIR}
+
+
 ######################################
 # target
 ######################################
@@ -29,12 +33,12 @@ OPT = -Og
 # paths
 #######################################
 # Build path
-BUILD_DIR = build
+BUILD_DIR = $(LOCAL_PATH)/build
 # Out path
 ifdef PREFIX
 OUT_DIR = $(PREFIX)
 else
-OUT_DIR = out
+OUT_DIR = $(LOCAL_PATH)/out
 endif
 
 
@@ -43,7 +47,7 @@ OUT_DIR_INCLUDE = $(OUT_DIR)/include
 ######################################
 # source
 ######################################
-C_SOURCES = $(shell find stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
+C_SOURCES = $(shell find $(LOCAL_PATH)/stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
 
 #######################################
 # binaries
