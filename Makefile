@@ -28,30 +28,18 @@ OPT = -Og
 #######################################
 # paths
 #######################################
-ifdef PARENT
-# Build path
-BUILD_DIR = $(PARENT)/build
-
-# Out path
-OUT_DIR = $(PARENT)/out
-else
 # Build path
 BUILD_DIR = build
 # Out path
 OUT_DIR = out
-endif
+
 
 OUT_DIR_LIB = $(OUT_DIR)/lib
 OUT_DIR_INCLUDE = $(OUT_DIR)/include
 ######################################
 # source
 ######################################
-# C sources
-ifdef PARENT
-C_SOURCES = $(shell find $(PARENT)/stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
-else
 C_SOURCES = $(shell find stm32f7xx-hal-driver/Src/ -type f -name "*.c" ! -name "*template*.c")
-endif
 
 #######################################
 # binaries
@@ -102,21 +90,12 @@ C_DEFS =  \
 -DSTM32F767xx
 
 # C includes
-ifdef PARENT
-C_INCLUDES =  \
--I$(PARENT)/stm32f7xx-hal-driver/Inc \
--I$(PARENT)/stm32f7xx-hal-driver/Inc/Legacy \
--I$(PARENT)/CMSIS/Device/Include \
--I$(PARENT)/CMSIS/Include \
--I$(PARENT)/Include
-else
 C_INCLUDES =  \
 -Istm32f7xx-hal-driver/Inc \
 -Istm32f7xx-hal-driver/Inc/Legacy \
 -ICMSIS/Device/Include \
 -ICMSIS/Include \
 -IInclude
-endif
 
 CFLAGS += $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
@@ -155,22 +134,13 @@ $(BUILD_DIR)/%.o: %.c Makefile | $(BUILD_DIR)
 $(TARGET).a: $(OBJECTS) Makefile | $(OUT_DIR) $(OUT_DIR_INCLUDE) $(OUT_DIR_LIB)
 	$(AR) rcs $(OUT_DIR_LIB)/$(TARGET).a $(OBJECTS)
 
-
-ifdef PARENT
-headers:
-	cp -r --parents $(PARENT)/stm32f7xx-hal-driver/Inc/ $(OUT_DIR_INCLUDE)
-	cp -r --parents $(PARENT)/stm32f7xx-hal-driver/Inc/Legacy/ $(OUT_DIR_INCLUDE)
-	cp -r --parents $(PARENT)/CMSIS/Device/Include/* $(OUT_DIR_INCLUDE)
-	cp -r --parents $(PARENT)/CMSIS/Include/* $(OUT_DIR_INCLUDE)
-	cp -r --parents $(PARENT)/Include/ $(OUT_DIR_INCLUDE)
-else
 headers:
 	cp -r --parents stm32f7xx-hal-driver/Inc/ $(OUT_DIR_INCLUDE)
 	cp -r --parents stm32f7xx-hal-driver/Inc/Legacy/ $(OUT_DIR_INCLUDE)
 	cp -r --parents CMSIS/Device/Include/* $(OUT_DIR_INCLUDE)
 	cp -r --parents CMSIS/Include/* $(OUT_DIR_INCLUDE)
 	cp -r --parents Include/ $(OUT_DIR_INCLUDE)
-endif
+
 $(BUILD_DIR):
 	mkdir $@
 
